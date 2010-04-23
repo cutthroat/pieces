@@ -32,10 +32,7 @@ data Addr2Line = Addr2Line ProcessID Fd Fd -- pid pipeTo pipeFrom
 executeAddr2Line input output parentIn parentOut imageName = do
     dupTo input stdInput
     dupTo output stdOutput
-    closeFd input
-    closeFd output
-    closeFd parentIn
-    closeFd parentOut
+    closeFd `mapM_` [input, output, parentIn, parentOut]
     executeFile "addr2line" True ["--demangle", "--functions", "--basenames", "--exe=" ++ imageName] Nothing
 
 spawnAddr2Line imageName = do
