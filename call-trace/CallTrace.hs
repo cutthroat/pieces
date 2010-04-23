@@ -60,7 +60,7 @@ addr2Line (Addr2Line _ toA2L fromA2L) addr = do
 jumpFromEvent a2l (JumpEvent t x y) = do
     x' <- addr2Line a2l x
     y' <- addr2Line a2l y
-    return $ Jump { jumpType = t, jumpThis = x', jumpSite = y' }
+    return Jump { jumpType = t, jumpThis = x', jumpSite = y' }
 
 dumpJump (Jump _ (JumpLine fun file line) _) = unwords [fun', file, show line]
     where fun' = fst (break (=='(') fun)
