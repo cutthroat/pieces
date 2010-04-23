@@ -1,0 +1,11 @@
+A very rudimentary way to trace function calls in GCC compiled application.
+
+Mainly an exercise in Haskell scripting and I/O.
+
+CallTrace.hs uses the 'addr2line' tool from GNU Binutils.
+
+TODO:
+* it would be nice to implement the things in
+    http://www.ibm.com/developerworks/library/l-graphvis/
+* more efficient IO between the instrumented executable and the CallTrace tool
+
