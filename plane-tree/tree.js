@@ -31,8 +31,8 @@
     function Tree() {
         this.v = [this.newNode()];
     }
-    Tree.prototype.newNode = function (p) {
-        return new Node(p);
+    Tree.prototype.newNode = function () {
+        return new Node();
     };
     Tree.prototype.randomNode = function () {
         return this.v[Math.floor(Math.random() * this.v.length)];
