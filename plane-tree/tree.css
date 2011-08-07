@@ -1,0 +1,17 @@
+.grid {
+    stroke: lightGray;
+}
+
+.link {
+    stroke: darkBlue;
+}
+
+.node {
+    fill: lightBlue;
+    stroke: darkBlue;
+}
+
+.new {
+    fill: gold;
+    stroke: gold;
+}
