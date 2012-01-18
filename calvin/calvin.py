@@ -26,7 +26,7 @@ with open('log', 'r') as LOG:
     LOG_STATE = {}
     for line in LOG:
         text_date, url, ext = line.split()
-        LOG_STATE[datetime.datetime.strptime(text_date, DATE_FORMAT).date()] = text_date + ext if ext != 'None' else None
+        LOG_STATE[parse_date(text_date)] = text_date + ext if ext != 'None' else None
 
 # reopen log
 LOG = open('log', 'a')
@@ -56,14 +56,13 @@ def got_image(date, url, ext):
     print(' ok')
 
 
-def parse_date(text):
-    if text is None:
-        return datetime.date.today()
-    return datetime.datetime.strptime(text, DATE_FORMAT).date()
+def parse_date(text, default=None):
+    return datetime.datetime.strptime(text, DATE_FORMAT).date() if text is not None else default
 
 def input_interval():
     _, start, end, *_ = sys.argv + [None, None]
-    return parse_date(start), parse_date(end)
+    today = date.datetime.today()
+    return parse_date(start, today), parse_date(end, today)
 
 def date_range(start, end):
     for i in range(start.toordinal(), end.toordinal() + 1):
@@ -88,7 +87,7 @@ def image_url(page):
 
 def save_image(url, date):
     content, content_type = read_url(url)
-    ext = (['.unknown']+mimetypes.guess_all_extensions(content_type))[-1]
+    ext = (['.unknown'] + mimetypes.guess_all_extensions(content_type))[-1]
     fname = date.strftime(DATE_FORMAT) + ext
     if os.path.exists(fname):
         return
@@ -106,7 +105,7 @@ if __name__ == '__main__':
             continue
         page = read_page(date)
         url = image_url(page)
-        if not url or comic_date(page) != date:
+        if url is None or comic_date(page) != date:
             got_no_image(date)
             continue
         got_url()
