@@ -1,0 +1,28 @@
+A short script to collect Calvin and Hobbes comic strips
+
+
+COLLECT
+
+>> ./calvin.py [start_date] [end_date]
+
+The date format is YYYY-MM-DD. The default date is today. Images are saved as
+YYYY-MM-DD<ext>. Execution is recorded in the log file named log. The script
+doesn't overwrite existing files.
+
+The script uses to regular expressions to obtain the date and the zoom image
+url from the strip page.
+
+
+LOG FORMAT AND EXECUTION
+
+    <DATE> <URL> <EXT>
+
+If no image had been obtained then <URL> and <EXT> are both None.
+
+
+VERIFY
+
+>> ./verify.py
+
+In case you are paranoid the verify script compares all images from the log
+with their remote counterparts.
