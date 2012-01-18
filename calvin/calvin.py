@@ -21,6 +21,46 @@ HEADERS = {
 }
 
 
+def parse_date(text, default=None):
+    return datetime.datetime.strptime(text, DATE_FORMAT).date() if text is not None else default
+
+def input_interval():
+    _, start, end, *_ = sys.argv + [None, None]
+    today = datetime.date.today()
+    return parse_date(start, today), parse_date(end, today)
+
+def date_range(start, end):
+    for i in range(start.toordinal(), end.toordinal() + 1):
+        yield datetime.date.fromordinal(i)
+
+def read_url(url):
+    request = urllib.request.Request(url=url, headers=HEADERS)
+    with urllib.request.urlopen(request) as response:
+        return response.read(), response.getheader('Content-Type')
+
+def read_page(date):
+    content, _ = read_url(CALVIN_URL+date.strftime('%Y/%m/%d'))
+    return content.decode()
+
+def comic_date(page):
+    match = DATE_REGEX.search(page)
+    return datetime.datetime.strptime(match.group(1), '%B %d, %Y').date() if match else None
+
+def image_url(page):
+    match = IMAGE_REGEX.search(page)
+    return match.group(1) if match else None
+
+def save_image(url, date):
+    content, content_type = read_url(url)
+    ext = (['.unknown'] + mimetypes.guess_all_extensions(content_type))[-1]
+    fname = date.strftime(DATE_FORMAT) + ext
+    if os.path.exists(fname):
+        return
+    with open(fname, 'wb') as file:
+        file.write(content)
+    return ext
+
+
 # replay log
 with open('log', 'r') as LOG:
     LOG_STATE = {}
@@ -54,46 +94,6 @@ def got_image(date, url, ext):
         return
     print(date, url, ext, file=LOG)
     print(' ok')
-
-
-def parse_date(text, default=None):
-    return datetime.datetime.strptime(text, DATE_FORMAT).date() if text is not None else default
-
-def input_interval():
-    _, start, end, *_ = sys.argv + [None, None]
-    today = date.datetime.today()
-    return parse_date(start, today), parse_date(end, today)
-
-def date_range(start, end):
-    for i in range(start.toordinal(), end.toordinal() + 1):
-        yield datetime.date.fromordinal(i)
-
-def read_url(url):
-    request = urllib.request.Request(url=url, headers=HEADERS)
-    with urllib.request.urlopen(request) as response:
-        return response.read(), response.getheader('Content-Type')
-
-def read_page(date):
-    content, _ = read_url(CALVIN_URL+date.strftime('%Y/%m/%d'))
-    return content.decode()
-
-def comic_date(page):
-    match = DATE_REGEX.search(page)
-    return datetime.datetime.strptime(match.group(1), '%B %d, %Y').date() if match else None
-
-def image_url(page):
-    match = IMAGE_REGEX.search(page)
-    return match.group(1) if match else None
-
-def save_image(url, date):
-    content, content_type = read_url(url)
-    ext = (['.unknown'] + mimetypes.guess_all_extensions(content_type))[-1]
-    fname = date.strftime(DATE_FORMAT) + ext
-    if os.path.exists(fname):
-        return
-    with open(fname, 'wb') as file:
-        file.write(content)
-    return ext
 
 
 if __name__ == '__main__':
