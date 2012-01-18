@@ -13,7 +13,9 @@ Two regular expressions are used to fetch the date and the zoom image url from
 the strip page.
 
 
-LOG FORMAT AND EXECUTION
+LOG
+
+Each line of the log file is of the form:
 
     <DATE> <URL> <EXT>
 
