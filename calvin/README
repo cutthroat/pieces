@@ -9,8 +9,8 @@ The date format is YYYY-MM-DD. The default date is today. Images are saved as
 YYYY-MM-DD<ext>. Execution is recorded in the log file named log. The script
 doesn't overwrite existing files.
 
-The script uses to regular expressions to obtain the date and the zoom image
-url from the strip page.
+Two regular expressions are used to fetch the date and the zoom image url from
+the strip page.
 
 
 LOG FORMAT AND EXECUTION
