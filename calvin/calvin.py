@@ -44,7 +44,6 @@ def replay():
     return open('log', 'a'), log_state
 
 def read(url):
-    global REQUEST_HEADERS
     request = urllib.request.Request(url=url, headers=REQUEST_HEADRES)
     with urllib.request.urlopen(request) as response:
         content_type = response.getheader('Content-Type')
